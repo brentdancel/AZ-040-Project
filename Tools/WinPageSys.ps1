@@ -12,10 +12,10 @@
 !!!!!!INCREASING PAGING FILE PROVDIES MORE VRAM, BUT IT DOES NOT REPLACE ADDING PHYSICAL RAM!!!!!!!
 #>
 
-#Disabling automatic management of the Paging file sizes
+# Disabling automatic management of the Paging file sizes
 Get-CimInstance -ClassName Win32_ComputerSystem | Set-CimInstance -Property @{AutomaticManagedPagefile = $false}
 
-#Gathering how much installed RAM(MB) workstation has
+# Gathering how much installed RAM(MB) workstation has
 $totalRamMB = Get-CimInstance -ClassName Win32_PhysicalMemory | Measure-Object -Property Capacity -Sum | ForEach-Object {$_.Sum / 1MB}
 
 # Gathering current Windows Paging File Settings on C drive
@@ -36,7 +36,7 @@ if ($currentSize.InitialSize -eq $initialSize -and $currentSize.MaximumSize -eq 
         Set-CimInstance -InputObject $currentSize -Property @{InitialSize = $initialSize; MaximumSize = $maxSize}
 }
 
-#Gathering new Windows Paging File Statistics
+# Gathering new Windows Paging File Statistics
 $newWinPagFile = Get-CimInstance -ClassName Win32_PageFileSetting | Where-Object { $_.Name -eq 'C:\pagefile.sys' } |Select-Object Name, InitialSize, MaximumSize
 
 # Final Interface
