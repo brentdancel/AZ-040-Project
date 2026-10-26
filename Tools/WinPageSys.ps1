@@ -1,6 +1,4 @@
 ﻿<#
-- Run As Administrator on the workstation
-
 - This script increases the Windows Paging file initial and maximum sizes on the C: drive
 
 - Run this script if...
