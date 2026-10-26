@@ -30,9 +30,9 @@ $maxSize = $totalRamMB * 3
 # Verify if sizes are already set to recommended settings
 # If not, set the sizes to the recommended settings
 if ($currentSize.InitialSize -eq $initialSize -and $currentSize.MaximumSize -eq $maxSize) {
-        Write-Host "The Windows Paging File Sizes are already set to the recommended settings"
+        Write-Host "The Windows Paging File Sizes are already set to the recommended settings" -ForegroundColor Green
 } else {
-        Write-Host "The Windows Paging File Sizes are not set to the recommended settings. Setting them now..."
+        Write-Host "The Windows Paging File Sizes are not set to the recommended settings. Setting them now..." -ForegroundColor Green
         Set-CimInstance -InputObject $currentSize -Property @{InitialSize = $initialSize; MaximumSize = $maxSize}
 }
 
@@ -40,7 +40,7 @@ if ($currentSize.InitialSize -eq $initialSize -and $currentSize.MaximumSize -eq 
 $newWinPagFile = Get-CimInstance -ClassName Win32_PageFileSetting | Where-Object { $_.Name -eq 'C:\pagefile.sys' } |Select-Object Name, InitialSize, MaximumSize
 
 # Final Interface
-Write-Host "This script has increased the Windows Paging File Sizes for the C drive"
-Write-Host ""
-Write-Host "#### New Windows Paging File Initial Size : $($newWinPagFile.InitialSize)   ###############"
-Write-Host "#### New Windows Paging File Initial Size: $($newWinPagFile.MaximumSize)   ###############"
+Write-Host "This script has increased the Windows Paging File Sizes for the C drive" -ForegroundColor Green
+Write-Host "" -ForegroundColor Green
+Write-Host "#### New Windows Paging File Initial Size : $($newWinPagFile.InitialSize)   ###############" -ForegroundColor Green
+Write-Host "#### New Windows Paging File Initial Size: $($newWinPagFile.MaximumSize)   ###############" -ForegroundColor Green

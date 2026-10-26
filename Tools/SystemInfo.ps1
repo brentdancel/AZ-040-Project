@@ -10,6 +10,3 @@ $cDrive.FreeSpace
 
 $uptime = $os.LocalDateTime - $os.LastBootUpTime
 $uptime.Hours
-
-$branch_test = 'This is a test string.'
-$branch_test
