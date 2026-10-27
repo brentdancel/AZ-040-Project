@@ -9,4 +9,4 @@ workloads using PowerShell scripting language
 Run as Administrator on desired device/server
 
 # Remarks
-You are free to use these for other your personal/work environments
+You are free to use these for your personal/work environments

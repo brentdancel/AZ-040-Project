@@ -42,3 +42,5 @@ Write-Host "This script has increased the Windows Paging File Sizes for the C dr
 Write-Host "" -ForegroundColor Green
 Write-Host "#### New Windows Paging File Initial Size : $($newWinPagFile.InitialSize)   ###############" -ForegroundColor Green
 Write-Host "#### New Windows Paging File Initial Size: $($newWinPagFile.MaximumSize)   ###############" -ForegroundColor Green
+Write-Host "" -ForegroundColor Green
+Write-Host "Please restart your computer at your convenience." -ForegroundColor Green
