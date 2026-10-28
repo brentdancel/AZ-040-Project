@@ -4,8 +4,6 @@ Original Author: Adam Bertram
 
 The original script was created by Adam Bertram
 I have modified the script for my own use
-
-ENSURE YOU HAVE THE ACTIVE DIRECTORY MODULE INSTALLED BEFORE RUNNING THIS SCRIPT
 #>
 # Parameters required input
 [CmdletBinding()]
@@ -14,6 +12,8 @@ param (
     [string]$LastName,
     [string]$Department
 )
+
+# Check if the Active Directory module is installed, and install it if not
 if (Get-Module -ListAvailable -Name ActiveDirectory) {
     Write-Verbose -Message "The ActiveDirectory module is already installed." -Verbose
 }
@@ -32,6 +32,8 @@ else {
         }
     }
 }
+
+# Prompting for user input if parameters are not provided
 if (-not $FirstName) {
     $FirstName = Read-Host -Prompt "Please enter the new user's first name"
 }
@@ -67,31 +69,29 @@ try {
 <# This generates a randomly generated password for the initial account creation
 You can change the minimum and maximum characters, depending on organizational needs #>
     Add-Type -AssemblyName 'System.Web'
-    $password = [System.Web.Security.Membership]::GeneratePassword((Get-Random Minimum 8 -Maximum 33), 3)
+    $password = [System.Web.Security.Membership]::GeneratePassword((Get-Random -Minimum 8 -Maximum 33), 3)
     $secPw = ConvertTo-SecureString -String $password -AsPlainText -Force
 
 
 # After getting all the parameters, we can now create the user account and add it to the desired group
     $newUserParams = @{
+        Name = "$FirstName $LastName"
         GivenName = $FirstName
         Surname = $LastName
         SamAccountName = $userName
+        UserPrincipalName = "$userName@$env:USERDNSDOMAIN"
         AccountPassword = $secPw
         ChangePasswordAtLogon = $true
-        Enabled = $true
+        # Create the account as disabled initially
+        Enabled = $false
         Department = $Department
         Path = $ou.DistinguishedName
-        Confirm = $false
     }
     New-ADuser @newUserParams
     Add-ADGroupMember -Identity $Department -Members $userName
 
-} catch {
-    Write-Host "Error: $_.Exception.Message" -ForegroundColor Red
-}
-
-
-<#    $html = @"
+# HTML output for the user onboarding information
+    $html = @"
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -101,12 +101,16 @@ You can change the minimum and maximum characters, depending on organizational n
                 <style>
                     body {
                         font-family: Arial, sans-serif;
-                        background-color: #132dc1;
+                        background-color: #9fa2b1;
                         margin: 0;
                         padding: 20px;
+                        text-align: center;
                     }
                     h1 {
                         color: #333;
+                    }
+                    h2 {
+                        color: #e41111;
                     }
                     p {
                         font-size: 16px;
@@ -114,23 +118,25 @@ You can change the minimum and maximum characters, depending on organizational n
                     }
                 </style>
         </head>
-            
-            <body>
-                <h1>User Onboarding</h1>
-                <p>A new user account has been created for $FirstName $LastName.</p>
-                <p>Username: $userName</p>
-                <p>Temporary Password: $password</p>
-                <p>Department: $Department</p>
-                <p>Path: $($ou.DistinguishedName)</p>
-                <p>Please ensure the user changes their password upon first login.</p>
-                <p>Delete this file after onboarding is complete to maintain security.</p>
-            </body>
-        </html>
+        
+        <body>
+            <h1>User Onboarding</h1>
+            <p>A new user account has been created for $FirstName $LastName.</p>
+            <p>Username: $userName</p>
+            <p>Temporary Password: $password</p>
+            <p>SamAccountName: $userName</p>
+            <p>UserPrincipalName: $userName@$env:USERDNSDOMAIN</p>
+            <p>Department: $Department</p>
+            <p>Path: $($ou.DistinguishedName)</p>
+            <h2>Please ensure the user changes their password upon first login.</h2>
+            <h2>Delete this file after onboarding is complete to maintain security.</h2>
+        </body>
+    </html>
 "@
 
     $html | Out-File -FilePath C:\Users\Public\Documents\UserOnboarding.html -Encoding UTF8
     Start-Process -FilePath "C:\Users\Public\Documents\UserOnboarding.html"
 
 } catch {
-    Write-Error -Message $_.Exception.Message
-} #>
+    Write-Host "Error: $_.Exception.Message" -ForegroundColor Red
+}

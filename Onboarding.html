@@ -1,34 +1,42 @@
-*Template for Onboarding.ps1*
+<!--Template for Onboarding.ps1-->
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Onboarding</title>
-
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #cccdd5;
-                margin: 0;
-                padding: 20px;
-                text-align: center;
-            }
-            h1 {
-                color: #333;
-            }
-            p {
-                font-size: 16px;
-                color: #555;
-            }
-        </style>
-
-    </head>
-    
-    <body>
-        <h1>User Onboarding</h1>
-        <p>A new user account has been created for $FirstName $LastName.</p>
-    </body>
-
-</html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>User Onboarding</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #9fa2b1;
+                        margin: 0;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    h1 {
+                        color: #333;
+                    }
+                    h2 {
+                        color: #e41111;
+                    }
+                    p {
+                        font-size: 16px;
+                        color: #555;
+                    }
+                </style>
+        </head>
+        
+        <body>
+            <h1>User Onboarding</h1>
+            <p>A new user account has been created for $FirstName $LastName.</p>
+            <p>Username: $userName</p>
+            <p>Temporary Password: $password</p>
+            <p>SamAccountName: $userName</p>
+            <p>UserPrincipalName: $userName@$env:USERDNSDOMAIN</p>
+            <p>Department: $Department</p>
+            <p>Path: $($ou.DistinguishedName)</p>
+            <h2>Please ensure the user changes their password upon first login.</h2>
+            <h2>Delete this file after onboarding is complete to maintain security.</h2>
+        </body>
+    </html>
