@@ -7,7 +7,12 @@ I have modified the script for my own use
 
 ENSURE YOU HAVE THE ACTIVE DIRECTORY MODULE INSTALLED BEFORE RUNNING THIS SCRIPT
 #>
-
+if (Get-Module -ListAvailable -Name ActiveDirectory) {
+    Write-Verbose -Message "The ActiveDirectory module is already installed." -Verbose
+}
+else {
+    Install-Module -Name ActiveDirectory -Force -Scope CurrentUser -Confirm:$false
+}
 # Parameters required input
 [CmdletBinding()]
 param (
