@@ -7,12 +7,6 @@ I have modified the script for my own use
 
 ENSURE YOU HAVE THE ACTIVE DIRECTORY MODULE INSTALLED BEFORE RUNNING THIS SCRIPT
 #>
-if (Get-Module -ListAvailable -Name ActiveDirectory) {
-    Write-Verbose -Message "The ActiveDirectory module is already installed." -Verbose
-}
-else {
-    Install-Module -Name ActiveDirectory -Force -Scope CurrentUser -Confirm:$false
-}
 # Parameters required input
 [CmdletBinding()]
 param (
@@ -20,6 +14,24 @@ param (
     [string]$LastName,
     [string]$Department
 )
+if (Get-Module -ListAvailable -Name ActiveDirectory) {
+    Write-Verbose -Message "The ActiveDirectory module is already installed." -Verbose
+}
+else {
+    $operatingSystem = Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction Stop
+    if ($operatingSystem.ProductType -eq 1) {
+        $installation = Add-WindowsCapability -Online -Name Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0 -ErrorAction Stop
+        if ($installation.State -ne 'Installed') {
+            throw "Failed to install the Active Directory RSAT capability."
+        }
+    }
+    else {
+        $installation = Install-WindowsFeature -Name RSAT-AD-PowerShell -ErrorAction Stop
+        if (-not $installation.Success) {
+            throw "Failed to install the Active Directory PowerShell feature."
+        }
+    }
+}
 if (-not $FirstName) {
     $FirstName = Read-Host -Prompt "Please enter the new user's first name"
 }
