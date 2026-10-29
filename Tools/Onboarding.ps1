@@ -93,44 +93,143 @@ You can change the minimum and maximum characters, depending on organizational n
 # HTML output for the user onboarding information
     $html = @"
         <!DOCTYPE html>
-        <html lang="en">
         <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>User Onboarding</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        background-color: #9fa2b1;
-                        margin: 0;
-                        padding: 20px;
-                        text-align: center;
-                    }
-                    h1 {
-                        color: #333;
-                    }
-                    h2 {
-                        color: #e41111;
-                    }
-                    p {
-                        font-size: 16px;
-                        color: #555;
-                    }
-                </style>
-        </head>
-        
-        <body>
-            <h1>User Onboarding</h1>
-            <p>A new user account has been created for $FirstName $LastName.</p>
-            <p>Username: $userName</p>
-            <p>Temporary Password: $password</p>
-            <p>SamAccountName: $userName</p>
-            <p>UserPrincipalName: $userName@$env:USERDNSDOMAIN</p>
-            <p>Department: $Department</p>
-            <p>Path: $($ou.DistinguishedName)</p>
-            <h2>Please ensure the user changes their password upon first login.</h2>
-            <h2>Delete this file after onboarding is complete to maintain security.</h2>
-        </body>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Onboarding</title>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #9fa2b1;
+                margin: 0;
+                padding: 20px;
+                text-align: center;
+            }
+
+            h1 {
+                color: #333;
+            }
+
+            h2 {
+                color: #e41111;
+            }
+
+            p {
+                font-size: 16px;
+                color: #555;
+            }
+
+            table {
+                width: 80%;
+                max-width: 700px;
+                margin: 20px auto;
+                border-collapse: collapse;
+                background-color: #ffffff;
+                text-align: left;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            }
+
+            th, td {
+                padding: 12px 15px;
+                border: 1px solid #ccc;
+                font-size: 16px;
+            }
+
+            th {
+                background-color: #333;
+                color: #ffffff;
+                text-align: left;
+            }
+
+            td:first-child {
+                width: 35%;
+                font-weight: normal;
+                background-color: #f2f2f2;
+            }
+
+            td strong {
+                color: #222;
+            }
+
+            h2 {
+                font-size: 18px;
+                margin-top: 25px;
+            }
+
+            @media (max-width: 600px) {
+                table {
+                    width: 100%;
+                }
+
+                th, td {
+                    padding: 10px;
+                    font-size: 14px;
+                    overflow-wrap: anywhere;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>User Onboarding</h1>
+
+        <p>
+            A new user account has been created for
+            <strong>$FirstName $LastName</strong>.
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Setting</th>
+                    <th>Information</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>First Name</td>
+                    <td><strong>$FirstName</strong></td>
+                </tr>
+                <tr>
+                    <td>Last Name</td>
+                    <td><strong>$LastName</strong></td>
+                </tr>
+                <tr>
+                    <td>Username</td>
+                    <td><strong>$userName</strong></td>
+                </tr>
+                <tr>
+                    <td>Temporary Password</td>
+                    <td><strong>$password</strong></td>
+                </tr>
+                <tr>
+                    <td>SamAccountName</td>
+                    <td><strong>$userName</strong></td>
+                </tr>
+                <tr>
+                    <td>UserPrincipalName</td>
+                    <td><strong>$userName@$env:USERDNSDOMAIN</strong></td>
+                </tr>
+                <tr>
+                    <td>Department</td>
+                    <td><strong>$Department</strong></td>
+                </tr>
+                <tr>
+                    <td>Organizational Unit (Path)</td>
+                    <td><strong>$($ou.DistinguishedName)</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>
+            Please ensure the user changes their password upon first login.
+        </h2>
+
+        <h2>
+            Delete this file after onboarding is complete to maintain security.
+        </h2>
+    </body>
     </html>
 "@
 
